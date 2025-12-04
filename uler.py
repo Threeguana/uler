@@ -2,8 +2,9 @@
 
 import turtle
 import time
+import random
 
-delay = 0.5
+delay = 0.1
 
 # setup screen
 window = turtle.Screen()
@@ -15,11 +16,21 @@ window.tracer(0) #matikan auto refresh
 # kepala
 kepala = turtle.Turtle() #membuat objek baru untuk menjadi kepala ulat
 kepala.speed(0) #set speed
-kepala.shape("triangle") #bentuk kepala segitiga dengan warna meraj
+window.addshape("gif/totorobocil.gif")
+window.addshape("gif/pizzamini.gif")
+kepala.shape("gif/totorobocil.gif") #bentuk kepala totoro
 kepala.color("red")
 kepala.penup() #matikan pen
 kepala.goto(0,0) #posisi kepala di tengha layar
 kepala.direction = "stop"
+
+# makanan totoro
+makanan = turtle.Turtle()
+makanan.speed(0)
+makanan.shape("gif/pizzamini.gif")
+makanan.penup()
+makanan.goto(0,100) #posisi makanan
+# kepala.direction = "stop"
 
 # function
 def keatas():
@@ -62,6 +73,13 @@ window.onkeypress(kekanan, "d")
 # main loop
 while True:
     window.update()
+
+    if kepala.distance(makanan) < 20:
+        # membuat makanan muncul di spot random
+        x = random.randint(-180, 180) # agar makanan tidak berada di luar frame
+        y = random.randint(-180, 180)
+        makanan.goto(x,y)
+
     gerak()
 
     time.sleep(delay)
