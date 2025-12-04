@@ -4,7 +4,7 @@ import turtle
 import time
 import random
 
-delay = 0.1
+delay = 0.2
 
 # setup screen
 window = turtle.Screen()
@@ -17,6 +17,7 @@ window.tracer(0) #matikan auto refresh
 kepala = turtle.Turtle() #membuat objek baru untuk menjadi kepala ulat
 kepala.speed(0) #set speed
 window.addshape("gif/totorobocil.gif")
+window.addshape("gif/firemini.gif")
 window.addshape("gif/pizzamini.gif")
 kepala.shape("gif/totorobocil.gif") #bentuk kepala totoro
 kepala.color("red")
@@ -31,6 +32,9 @@ makanan.shape("gif/pizzamini.gif")
 makanan.penup()
 makanan.goto(0,100) #posisi makanan
 # kepala.direction = "stop"
+
+# menambahkan bada totoro saat ia makan pizza
+segments = []
 
 # function
 def keatas():
@@ -79,6 +83,26 @@ while True:
         x = random.randint(-180, 180) # agar makanan tidak berada di luar frame
         y = random.randint(-180, 180)
         makanan.goto(x,y)
+
+        # menambahkan segments
+        new_segment = turtle.Turtle()
+        new_segment.speed(0)
+        new_segment.shape("gif/firemini.gif")
+        new_segment.penup()
+        segments.append(new_segment)
+
+    # geser semua segmen badan dari belakang ke posisi segmen sebelumnya
+    for index in range(len(segments)-1, 0, -1):
+        x = segments[index-1].xcor() # posisi segmen depan
+        y = segments[index-1].ycor()
+        segments[index].goto(x, y) # pindahkan segmen ini ke posisi segmen depan
+
+    # pindahkan segmen pertama agar mengikuti kepala
+    if len(segments) > 0:
+        x = kepala.xcor() # ambil posisi kepala
+        y = kepala.ycor()
+        segments[0].goto(x, y) # segmen pertama mengikuti kepala
+
 
     gerak()
 
