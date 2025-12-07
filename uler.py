@@ -4,7 +4,11 @@ import turtle
 import time
 import random
 
-delay = 0.2
+delay = 0.1
+
+# Score
+score = 0
+high_score = 0
 
 # setup screen
 window = turtle.Screen()
@@ -36,18 +40,32 @@ makanan.goto(0,100) #posisi makanan
 # menambahkan bada totoro saat ia makan pizza
 segments = []
 
+# tulisan score
+pen = turtle.Turtle()
+pen.speed(0)
+pen.shape("square")
+pen.color("black")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 160)
+pen.write("score: 0 High Score: 0", align="center", font=("Courier", 14, "normal"))
+
 # function
 def keatas():
-    kepala.direction = "up"
+    if kepala.direction != "down": #agar tidak bisa balik arah 180 derajat
+        kepala.direction = "up"
 
 def kebawah():
-    kepala.direction = "down"
+    if kepala.direction != "up":
+        kepala.direction = "down"
 
 def kekiri():
-    kepala.direction = "left"
+    if kepala.direction != "right":
+        kepala.direction = "left"
 
 def kekanan():
-    kepala.direction = "right"
+    if kepala.direction != "left":
+        kepala.direction = "right"
 
 
 def gerak():
@@ -91,6 +109,15 @@ while True:
         # bersihkan list segmen
         segments.clear()
 
+        # reset score
+        score = 0
+
+        # reset delat
+        delay = 0.1
+
+        pen.clear()
+        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Courier", 14, "normal"))
+
     # cek adanya makanan
     if kepala.distance(makanan) < 20:
         # membuat makanan muncul di spot random
@@ -104,6 +131,17 @@ while True:
         new_segment.shape("gif/firemini.gif")
         new_segment.penup()
         segments.append(new_segment)
+
+        # pendekkan delat
+        delay -= 0.01
+
+        # untuk score
+        score += 10
+        if score > high_score:
+            high_score = score
+
+        pen.clear()
+        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Courier", 14, "normal"))
 
     # geser semua segmen badan dari belakang ke posisi segmen sebelumnya
     for index in range(len(segments)-1, 0, -1):
