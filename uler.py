@@ -78,6 +78,20 @@ window.onkeypress(kekanan, "d")
 while True:
     window.update()
 
+    # cek tabrakan dengan batas layar
+    if kepala.xcor() > 180 or kepala.xcor() < -180 or kepala.ycor() > 180 or kepala.ycor() <-180:
+        time.sleep(1)
+        kepala.goto(0, 0)
+        kepala.direction = "stop"
+
+        # sembunyikan segmen
+        for segment in segments:
+            segment.goto(1000, 1000) #pindahkan segmen ke luar layar
+
+        # bersihkan list segmen
+        segments.clear()
+
+    # cek adanya makanan
     if kepala.distance(makanan) < 20:
         # membuat makanan muncul di spot random
         x = random.randint(-180, 180) # agar makanan tidak berada di luar frame
@@ -103,8 +117,21 @@ while True:
         y = kepala.ycor()
         segments[0].goto(x, y) # segmen pertama mengikuti kepala
 
-
     gerak()
+
+    # cek kepala bertabrakan dengan badan
+    for segment in segments:
+        if segment.distance(kepala) < 20:
+            time.sleep(1) # untuk menghentikan (pause) program selama 1 detik
+            kepala.goto(0, 0)
+            kepala.direction = "stop"
+
+            # sembunyikan segmen
+            for segment in segments:
+                segment.goto(1000, 1000)
+
+            # bersihkan list segmen
+            segments.clear()
 
     time.sleep(delay)
 
